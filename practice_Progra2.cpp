@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -10,9 +11,114 @@ void guessMyNumber();
 void vectorsPart1();
 void vectorPractice();
 void vectorReserve();
+void wordShuffleGame();
+void iterators();
+void iterInventory();
 
 
 int main()
+{
+    const int MAX_ATTEMPTS = 3;
+    int attempts = 0;
+
+    vector<string> words;
+    words.push_back("COMPUTADORA");
+    words.push_back("JUEGO");
+    words.push_back("CODIGO");
+    words.push_back("REFRIGERADOR");
+
+    srand(time(NULL));
+    int randomNumber = rand();
+    int wordsRandomIndex = (randomNumber % words.size());
+    string wordSelected = words[wordsRandomIndex];
+
+    //cout << wordSelected << endl;
+
+    random_shuffle(wordSelected.begin(), wordSelected.end());
+    cout << wordSelected << endl;
+
+    string correctWord;
+
+    do
+    {
+        cin >> correctWord;
+        transform(correctWord.begin(), correctWord.end(), correctWord.begin(), ::toupper);
+        //cout << correctWord << endl;
+
+        if (correctWord == words[wordsRandomIndex])
+        {
+            cout << "Adivinaste la palabra!!!" << endl;
+            break;
+        }
+        else
+        {
+            attempts++;
+            cout << "Fallaste inutil, te quedan " << MAX_ATTEMPTS - attempts << " intentos" << endl;
+        }
+
+    } while (attempts != MAX_ATTEMPTS);
+
+    if (attempts == MAX_ATTEMPTS)
+    {
+        cout << "Perdiste, date de baja, la palabra era: " << endl;
+        cout << words[wordsRandomIndex] << endl;
+    }
+
+}
+
+void iterInventory()
+{
+    vector<string> inventory;
+    inventory.push_back("Espada");
+    inventory.push_back("Escudo");
+    inventory.push_back("Martillo");
+    inventory.push_back("Rifle");
+
+    vector<string>::iterator myIterator;
+    vector<string>::const_iterator iter;
+
+    cout << "Tus Items: " << endl;
+    for (iter = inventory.begin(); iter != inventory.end(); iter++)
+    {
+        cout << *iter << endl;
+    }
+
+    //Intercambiar
+    cout << "Intercambiaste tu " << inventory[2] << " por un arco" << endl;
+    myIterator = inventory.begin() + 2;
+    *myIterator = "Arco";
+    cout << "Tus Items" << endl;
+    for (iter = inventory.begin(); iter != inventory.end(); iter++)
+    {
+        cout << *iter << endl;
+    }
+
+    //SIZE
+    cout << "El nombre del item " << *myIterator << " tiene ";
+    cout << (*myIterator).size() << " letras" << endl;
+
+    cout << "El nombre del item " << *myIterator << " tiene ";
+    cout << (myIterator)->size() << " letras" << endl;
+
+    //INSERT
+    cout << "Recuperaste la bomba robada" << endl;
+    inventory.insert(inventory.begin() + 4, "bomba");
+    cout << "Tus Items" << endl;
+    for (iter = inventory.begin(); iter != inventory.end(); iter++)
+    {
+        cout << *iter << endl;
+    }
+
+    //Delete
+    cout << "Your " << inventory[1] << " has been destroyed by an enemy!!!\n";
+    inventory.erase(inventory.begin() + 1);
+    for (iter = inventory.begin(); iter != inventory.end(); iter++)
+    {
+        cout << *iter << endl;
+    }
+}
+
+void iterators()
 {
     const int NUM_SCORES = 4;
     int score;
@@ -32,6 +138,89 @@ int main()
         cout << *iter << endl;
     }
 
+    cout << "Buscar puntajes: Ingresa el puntaje que quieres buscar" << endl;
+    cin >> score;
+
+    iter = find(scores.begin(), scores.end(), score);
+
+    if (iter != scores.end())
+    {
+        cout << "Tu puntaje se encuentra en el vector" << endl;
+    }
+    else
+    {
+        cout << "No encontramos el puntaje que buscas" << endl;
+    }
+
+    /*Random Shuffle*/
+
+    srand(time(NULL));
+    //random_shuffle(scores.begin(), score.
+}
+
+void wordShuffleGame()
+{
+    int vidas = 3;
+    string guessWord = " ";
+    string OGword = " ";
+    srand(static_cast<unsigned int>(time(0)));
+    int randomNumber = rand();
+    int secretNumber = (randomNumber % 20) + 1;
+    string word[] = {
+        "barbaro",
+        "arquera",
+        "gigante",
+        "rompemuros",
+        "duende",
+        "globo",
+        "mago",
+        "curandera",
+        "dragon",
+        "minero",
+        "yeti",
+        "titan",
+        "esbirro",
+        "valquiria",
+        "golem",
+        "bruja",
+        "sabueso",
+        "cazadora",
+        "hechizo",
+        "heroe"
+    };
+    while (vidas > 0)
+    {
+        randomNumber = rand();
+        secretNumber = (randomNumber % 20) + 1;
+        OGword = word[secretNumber];
+        random_shuffle(word[secretNumber].begin(), word[secretNumber].end());
+        cout << word[secretNumber] << endl;
+        word[secretNumber] = OGword;
+        cout << "Escribe la palabra ordenada" << endl;
+        cout << "(Te quedan " << vidas << " vidas)" << endl;
+        cin >> guessWord;
+        if (guessWord == word[secretNumber])
+        {
+            system("cls");
+            cout << "Correcto" << endl;
+        }
+        else
+        {
+            system("cls");
+            cout << "Incorrecto, la palabra era " << word[secretNumber] << endl;
+            vidas = vidas - 1;
+        }
+        if (vidas == 0)
+        {
+            system("cls");
+            cout << "Perdiste todas tus vidas, quieres volver a jugar ?" << endl;
+            cin >> guessWord;
+            if (guessWord == "si" || guessWord == "Si")
+            {
+                vidas = 3;
+            }
+        }
+    }
 }
 
 void vectorReserve()
@@ -134,7 +323,7 @@ void vectorPractice()
     {
         cout << i + 1 << ") " << inventory[i] << endl;
     }
-    
+
 }
 
 
