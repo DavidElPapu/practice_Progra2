@@ -14,9 +14,56 @@ void vectorReserve();
 void wordShuffleGame();
 void iterators();
 void iterInventory();
+void buenWordShuffleGame();
+int badSwapNumbers(int score1, int score2);
+int goodSwapNumbers(int& score1, int& score2);
 
 
 int main()
+{
+    int score1 = 20;
+    int score2 = 100;
+
+    cout << score1 << endl;
+    cout << score2 << endl;
+
+    //BAD SWAPPER
+    badSwapNumbers(score1, score2);
+
+    cout << score1 << endl;
+    cout << score2 << endl;
+
+    //GOOD SWAPPER
+    goodSwapNumbers(score1, score2);
+    
+    cout << score1 << endl;
+    cout << score2 << endl;
+
+}
+
+int goodSwapNumbers(int& score1, int& score2)
+{
+    int intermedio;
+
+    intermedio = score1;
+    score1 = score2;
+    score2 = intermedio;
+
+    return score1, score2;
+}
+
+int badSwapNumbers(int score1, int score2)
+{
+    int intermedio;
+
+    intermedio = score1;
+    score1 = score2;
+    score2 = intermedio;
+
+    return score1, score2;
+}
+
+void buenWordShuffleGame()
 {
     const int MAX_ATTEMPTS = 3;
     int attempts = 0;
@@ -63,7 +110,6 @@ int main()
         cout << "Perdiste, date de baja, la palabra era: " << endl;
         cout << words[wordsRandomIndex] << endl;
     }
-
 }
 
 void iterInventory()
