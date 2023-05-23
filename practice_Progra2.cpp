@@ -17,9 +17,131 @@ void iterInventory();
 void buenWordShuffleGame();
 int badSwapNumbers(int score1, int score2);
 int goodSwapNumbers(int& score1, int& score2);
-
+void swap();
+void display(const vector<string>& vec);
+void matrices();
 
 int main()
+{
+    const int ROWS = 3;
+    const int COLUMNS = 3;
+    
+    int RJ = 0;
+    int CJ = 0;
+
+    while (true)
+    {
+        for (int i = 0; i < ROWS; i++)
+        {
+            for (int j = 0; j < COLUMNS; j++)
+            {
+                cout << "|   ";
+            }
+            cout << "|" << endl;
+        }
+        cin >> RJ;
+        cin >> CJ;
+    }
+}
+
+void matrices()
+{
+    const int ROWS = 5;
+    const int COLUMNS = 5;
+
+    cout << "Caja" << endl;
+    for (int i = 0; i < ROWS; i++)
+    {
+        for (int j = 0; j < COLUMNS; j++)
+        {
+            if (j == 0 || j == (COLUMNS - 1) || i == 0 || i == (ROWS - 1))
+            {
+                cout << " 1 ";
+            }
+            else
+            {
+                cout << " 0 ";
+            }
+        }
+        cout << " " << endl;
+    }
+
+    cout << "Diagonal" << endl;
+    for (int i = 0; i < ROWS; i++)
+    {
+        for (int j = 0; j < COLUMNS; j++)
+        {
+            if (i == j)
+            {
+                cout << " 1 ";
+            }
+            else
+            {
+                cout << " 0 ";
+            }
+        }
+        cout << " " << endl;
+    }
+
+    cout << "Diagonal Invertida" << endl;
+    for (int i = 0; i < ROWS; i++)
+    {
+        for (int j = 0; j < COLUMNS; j++)
+        {
+            if (j == ((ROWS - 1) - i))
+            {
+                cout << " 1 ";
+            }
+            else
+            {
+                cout << " 0 ";
+            }
+        }
+        cout << " " << endl;
+    }
+
+    cout << "Caja con X" << endl;
+    for (int i = 0; i < ROWS; i++)
+    {
+        for (int j = 0; j < COLUMNS; j++)
+        {
+            if (i == j || (j == 0 || j == (COLUMNS - 1) || i == 0 || i == (ROWS - 1)))
+            {
+                cout << " 1 ";
+            }
+            else if (j == ((ROWS - 1) - i))
+            {
+                cout << " 1 ";
+            }
+            else
+            {
+                cout << " 0 ";
+            }
+        }
+        cout << " " << endl;
+    }
+}
+
+void display(const vector<string>& vec)
+{
+    /* Esto va en el main
+    vector<string> inventory;
+
+    inventory.push_back("sword");
+    inventory.push_back("armor");
+    inventory.push_back("gun");
+
+    display(inventory);
+    */
+
+    vector<string>::const_iterator iter;
+    for (iter = vec.begin(); iter != vec.end(); iter++)
+    {
+        cout << *iter << endl;
+    }
+}
+
+void swap()
 {
     int score1 = 20;
     int score2 = 100;
@@ -35,10 +157,9 @@ int main()
 
     //GOOD SWAPPER
     goodSwapNumbers(score1, score2);
-    
+
     cout << score1 << endl;
     cout << score2 << endl;
-
 }
 
 int goodSwapNumbers(int& score1, int& score2)
