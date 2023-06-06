@@ -3,6 +3,7 @@
 #include <vector>
 #include <algorithm>
 
+
 using namespace std;
 
 int askNumber(string question, int high, int low = 1);
@@ -21,27 +22,142 @@ void swap();
 void display(const vector<string>& vec);
 void matrices();
 
+//Exam P2
+void BuySpace(vector<string>& inventory, unsigned int& gems, string itemFound);
+void ReplaceItem(vector<string>& inventory, string itemFound);
+string GetRandomItem(vector<string>& items);
+void DisplayInventory(vector<string>& inventory);
+bool AskYesNo(string question);
+void ShowMenu();
+
+const int MAX_ITEMS = 6;
+const int SPACE_COST = 6;
+const int FREE_ITEMS = 3;
+
 int main()
 {
-    const int ROWS = 3;
-    const int COLUMNS = 3;
-    
-    int RJ = 0;
-    int CJ = 0;
+    std::setlocale(LC_ALL, "es_ES.UTF-8");
+    unsigned int gems = 8;
 
-    while (true)
+    //Items
+    vector<string> items = { "espada", "martillo", "bomba", "escudo" };
+
+    //inventory
+    vector<string> inventory;
+    inventory.reserve(MAX_ITEMS);
+    vector<string>::const_iterator iter;
+    bool isContinue;
+
+    do
     {
-        for (int i = 0; i < ROWS; i++)
+        cout << "---INVENTARIO---" << endl;
+        cout << "Gemas: " << gems << endl;
+
+        string itemFound = GetRandomItem(items);
+
+        cout << "Has encontrado un(a) " << itemFound << "!!" << endl;
+
+        if (inventory.size() >= FREE_ITEMS)
         {
-            for (int j = 0; j < COLUMNS; j++)
+            ShowMenu();
+            int option = askNumber("\nElige un numero ", 3);
+
+            switch (option)
             {
-                cout << "|   ";
+            case 1:
+                ReplaceItem(inventory, itemFound);
+                break;
+            case 2:
+                BuySpace(inventory, gems, itemFound);
+                break;
+            default:
+                break;
             }
-            cout << "|" << endl;
         }
-        cin >> RJ;
-        cin >> CJ;
+        else
+        {
+            inventory.push_back(itemFound);
+        }
+
+        //DisplayItems
+        DisplayInventory(inventory);
+
+        isContinue = AskYesNo("¿Seguir explorando?");
+
+    } while (isContinue);
+
+    cout << "Vuelve Pronto" << endl;
+}
+
+void BuySpace(vector<string>& inventory, unsigned int& gems, string itemFound)
+{
+    if (gems >= SPACE_COST)
+    {
+        cout << "\n Espacio comprado con éxito!!\n";
+        inventory.push_back(itemFound);
+        gems -= SPACE_COST;
     }
+    else
+    {
+        cout << "\nNo tienes gemas suficientes!!\n";
+    }
+}
+
+void ReplaceItem(vector<string>& inventory, string itemFound)
+{
+    vector<string>::iterator iter;
+    int itemChosen = 0;
+    cout << "Que item deseas reemplazar?" << endl;
+    DisplayInventory(inventory);
+    cin >> itemChosen;
+    iter = inventory.begin() + itemChosen;
+    *iter = itemFound;
+}
+
+string GetRandomItem(vector<string>& items)
+{
+    srand(time(NULL));
+    int itemRandomIndex = (rand() % items.size());
+    string itemSelected = items[itemRandomIndex];
+
+    return itemSelected;
+}
+
+void DisplayInventory(vector<string>& inventory)
+{
+    vector<string>::const_iterator iter;
+    int i = 0;
+    cout << "Tus items" << endl;
+    for (iter = inventory.begin(); iter != inventory.end(); iter++)
+    {
+        cout << i << "_" << *iter << endl;
+        i++;
+    }
+}
+
+bool AskYesNo(string question)
+{
+    char answer;
+
+    do {
+        cout << "\n" << question << "(y/n)";
+        cin >> answer;
+    } while (answer != 'y' && answer != 'n');
+
+    if (answer == 'y')
+    {
+        return true;
+    }
+
+    return false;
+}
+
+void ShowMenu()
+{
+    cout << "\nYa no tienes espacio para más objetos, que te gustaría hacer:\n";
+    cout << "\n1. Reemplazar objeto.";
+    cout << "\n2. Continuar sin el objeto.";
+    cout << "\n3. Añadir un espacio por " << SPACE_COST << " gemas.";
 }
 
 void matrices()
@@ -497,14 +613,52 @@ void vectorPractice()
 
 int askNumber(string question, int high, int low)
 {
-    int number = 0;
+    string input;
+    bool isValid = false;
+    //int number = 0;
+    bool primeraVez = true;
 
     do {
-        cout << question << "entre " << low << " y " << high << endl;
-        cin >> number;
-    } while (number > high || number < low);
+        isValid = true;
+        if (primeraVez == false)
+        {
+            cout << question << "entre " << low << " y " << high << endl;
+        }
+        
+        //cin >> input;
+        getline(cin, input);
+        
 
-    return number;
+        for (char c : input)
+        {
+            if (!isdigit(c))
+            {
+                isValid = false;
+                break;
+            }
+        }
+
+        if (!isValid)
+        {
+            cout << "Entrada inválida, porfavor elige solo numeros." << endl;
+        }
+        else if (input.empty() && primeraVez == false)
+        {
+            cout << "Entrada vacia, no valida, pon algo" << endl;
+        }
+        else if (input.empty() && primeraVez == true)
+        {
+            primeraVez = false;
+        }
+        else
+        {
+            cout << "Bien hecho" << endl;
+        }
+    } while (!isValid || input.empty());
+    
+    //number > high || number < low
+
+    return stoi(input);
 }
 
 
